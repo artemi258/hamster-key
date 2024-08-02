@@ -1,0 +1,33 @@
+.container {
+ width: 1140px;
+ margin: 0 auto;
+ display: flex;
+ align-items: center;
+ flex-direction: column;
+}
+
+.spinner {
+ font-size: 20px;
+ color: deeppink;
+ margin-top: 10px;
+}
+
+.keys {
+ margin-top: 10px;
+}
+
+.img {
+ display: none;
+ width: 100px;
+ height: 89px;
+ object-fit: cover;
+}
+
+* {
+ box-sizing: border-box;
+ margin: 0;
+}
+
+body {
+ padding: 30px 0;
+}
