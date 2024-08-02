@@ -39,6 +39,8 @@ window.addEventListener('DOMContentLoaded', () => {
     registerEvent(clientToken);
    })
    .catch((err) => {
+    btn.disabled = '';
+
     spinner.textContent = 'Ошибка! Не удалось создать токен клиента';
     console.log(`не удалось создать clientToken. Ошибка: ${err}`);
    });
@@ -71,6 +73,7 @@ window.addEventListener('DOMContentLoaded', () => {
      }
     })
     .catch((err) => {
+     btn.disabled = '';
      spinner.textContent = 'Ошибка! Не удалось зарегистрировать событие';
      console.log(`не удалось зарегистрировать событие. Ошибка: ${err}`);
     });
@@ -99,14 +102,17 @@ window.addEventListener('DOMContentLoaded', () => {
     wrapper.append(elem);
     img.style.display = 'block';
     spinner.textContent = 'готово!';
+    btn.disabled = '';
    })
    .catch((err) => {
+    btn.disabled = '';
     spinner.textContent = 'Ошибка! Не удалось сгенерировать ключ';
     console.log(`не удалось сгенерировать ключ. Ошибка: ${err}`);
    });
  };
 
  const start = () => {
+  btn.disabled = 'true';
   getClientToken();
  };
 
