@@ -39,6 +39,7 @@ export const generateKey = (count) => {
    })
    .catch((err) => {
     btn.disabled = '';
+    btn2.disabled = '';
 
     spinner.textContent = 'Ошибка! Не удалось создать токен клиента';
     console.log(`не удалось создать clientToken. Ошибка: ${err}`);
