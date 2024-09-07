@@ -6,7 +6,7 @@ export const generateKey = async ({ name, appToken, promoId }) => {
  let i = 1;
  return await new Promise((res, rej) => {
   const attemptCounter = (text) => {
-   if (i === 3) {
+   if (i === 4) {
     rej(text);
    } else {
     i++;
@@ -75,7 +75,7 @@ export const generateKey = async ({ name, appToken, promoId }) => {
         generateKey(token);
         clearInterval(codeInterval);
        } else {
-        if (count === 7) {
+        if (count === 10) {
          clearInterval(codeInterval);
          throw new Error();
         }
