@@ -8,31 +8,34 @@
  <body>
   <!-- Yandex.Metrika counter -->
   <script type="text/javascript">
-   (function (m, e, t, r, i, k, a) {
-    m[i] =
-     m[i] ||
-     function () {
-      (m[i].a = m[i].a || []).push(arguments);
-     };
-    m[i].l = 1 * new Date();
-    for (var j = 0; j < document.scripts.length; j++) {
-     if (document.scripts[j].src === r) {
-      return;
-     }
-    }
-    (k = e.createElement(t)),
-     (a = e.getElementsByTagName(t)[0]),
-     (k.async = 1),
-     (k.src = r),
-     a.parentNode.insertBefore(k, a);
-   })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
+   document.location.hostname !== 'localhost' &&
+    (function () {
+     (function (m, e, t, r, i, k, a) {
+      m[i] =
+       m[i] ||
+       function () {
+        (m[i].a = m[i].a || []).push(arguments);
+       };
+      m[i].l = 1 * new Date();
+      for (var j = 0; j < document.scripts.length; j++) {
+       if (document.scripts[j].src === r) {
+        return;
+       }
+      }
+      (k = e.createElement(t)),
+       (a = e.getElementsByTagName(t)[0]),
+       (k.async = 1),
+       (k.src = r),
+       a.parentNode.insertBefore(k, a);
+     })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
 
-   ym(97494242, 'init', {
-    clickmap: true,
-    trackLinks: true,
-    accurateTrackBounce: true,
-    webvisor: true,
-   });
+     ym(97494242, 'init', {
+      clickmap: true,
+      trackLinks: true,
+      accurateTrackBounce: true,
+      webvisor: true,
+     });
+    })();
   </script>
   <noscript
    ><div>
@@ -44,11 +47,12 @@
   <!-- /Yandex.Metrika counter -->
   <main class="container">
    <h1 class="title">Генерация ключей для Hamster kombat</h1>
-   <button class="btn">СТАРТ 1 КЛЮЧ</button>
+   <!-- <button class="btn">СТАРТ 1 КЛЮЧ</button> -->
    <button class="btn2">СТАРТ 4 КЛЮЧА</button>
-   <div class="spinner"></div>
+   <div class="spinnerText"></div>
+   <img src="./assets/images/spinner.svg" class="spinner" />
    <img src="./assets/images/success.jpg" alt="ok" class="img" />
-   <ul class="keys"></ul>
+   <div class="table"></div>
   </main>
  <script src="js/bundle.js"></script></body>
 </html>

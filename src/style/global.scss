@@ -6,14 +6,25 @@
  flex-direction: column;
 }
 
-.spinner {
+.spinnerText {
  font-size: 20px;
- color: deeppink;
+ color: #609acc;
  margin-top: 10px;
 }
 
-.keys {
+.spinner {
+ display: none;
+ width: 64px;
+ height: 64px;
+}
+
+.table {
+ display: flex;
+ justify-content: space-between;
+ flex-wrap: wrap;
  margin-top: 10px;
+ width: 100%;
+ color: #6cade6;
 }
 
 .img {
@@ -21,6 +32,13 @@
  width: 100px;
  height: 89px;
  object-fit: cover;
+}
+
+button {
+ &:disabled {
+  box-shadow: none;
+  background-color: #304d66;
+ }
 }
 
 .btn {
@@ -58,6 +76,14 @@
 * {
  box-sizing: border-box;
  margin: 0;
+}
+
+ul {
+ list-style: none;
+ padding: 0;
+ li {
+  margin-top: 5px;
+ }
 }
 
 body {
