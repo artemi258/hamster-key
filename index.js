@@ -10,7 +10,6 @@ const URL =
 	);
 
 const startFarmDogiators = async () => {
-	// let timeout = null;
 	const option = { headless: false };
 
 	const browser = await puppeteer.launch(option);
@@ -18,7 +17,9 @@ const startFarmDogiators = async () => {
 	const page = await browser.newPage();
 
 	await page.emulate(Pixel).catch(() => console.log('ошибка эмуляции'));
-	await page.goto(URL).catch(() => console.log('ошибка перехода на страницу'));
+	await page
+		.goto(URL, { waitUntil: 'load' })
+		.catch(() => console.log('ошибка перехода на страницу'));
 
 	await page.waitForSelector('.css-aq8fga');
 	await page.$eval('.css-aq8fga', (btn) => btn.click());
@@ -26,10 +27,87 @@ const startFarmDogiators = async () => {
 	await page.$eval('.css-73lj20', (btn) => btn.click());
 	await page.waitForSelector('.css-1ru9rcs');
 	await page.$$eval('.css-1ru9rcs', (btn) => btn[2].click());
-	await page.waitForSelector('[role="figure"]');
 
-	const figure = await page.$('[role="figure"]');
-	figure.click();
+	const generateCoordinates = (figureData) => {
+		const maxWidth = figureData.width;
+		const maxHeight = figureData.height;
+		const minWidth = figureData.width / 3;
+		const minHeight = figureData.height / 3;
+		const coordinatesForClickX = Math.round(
+			Math.random() * (maxWidth - minWidth - minWidth) + minWidth
+		);
+		const coordinatesForClickY = Math.round(
+			Math.random() * (maxHeight - minHeight - minHeight) + minHeight
+		);
+		return {
+			coordinatesX: coordinatesForClickX,
+			coordinatesY: coordinatesForClickY,
+		};
+	};
+	const startFarm = async () => {
+		let launchedClick = true;
+
+		await page.waitForSelector('[role="figure"]');
+		const figure = await page.$('[role="figure"]');
+		const figureData = await figure.boundingBox();
+
+		const click = () => {
+			if (launchedClick) {
+				const intervalClickRandom = Math.round(Math.random() * (500 - 300) + 300);
+
+				setTimeout(() => {
+					const { coordinatesX, coordinatesY } = generateCoordinates(figureData);
+					console.log(`X${coordinatesX} Y${coordinatesY}`);
+					figure.click({ offset: { x: coordinatesX, y: coordinatesY } });
+
+					click();
+				}, intervalClickRandom);
+			} else {
+				setTimeout(launchTurbo, 2000);
+			}
+		};
+
+		click();
+
+		setTimeout(() => (launchedClick = false), 10000);
+	};
+
+	const launchTurbo = async () => {
+		await page.waitForSelector('.MuiButtonGroup-root.MuiButtonGroup-contained.css-1cuvp1a', {
+			visible: true,
+		});
+
+		const boosts = await page.$$(
+			'.MuiButtonGroup-root.MuiButtonGroup-contained.css-1cuvp1a button',
+			{ visible: true }
+		);
+		await boosts[0].click().catch(() => console.log('no click'));
+
+		await page.waitForSelector('.MuiBox-root.css-108biwi', { visible: true });
+
+		const turbo = await page.$$('.MuiBox-root.css-108biwi button');
+		await turbo[0].click();
+
+		const btn = await page.$('.MuiBox-root.css-4q3rnc button');
+
+		await page.waitForFunction(() => new Promise((res, _rej) => setTimeout(() => res('ok'), 5000)));
+
+		await btn.click();
+
+		await page.waitForSelector('[alt="turbo"]', { visible: true });
+
+		const imgTurbo = await page.$('[alt="turbo"]');
+
+		await imgTurbo.click();
+
+		await page.waitForFunction(() => new Promise((res, _rej) => setTimeout(() => res('ok'), 2000)));
+
+		startFarm();
+	};
+	launchTurbo();
+
+	// setInterval(startFarm, 1000);
+
 	// await page.$eval('[role="figure"]', (figure) => {
 	// 	figureData = figure.getBoundingClientRect();
 	// 	console.log(figureData);
