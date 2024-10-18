@@ -17,7 +17,7 @@ const URL =
 	);
 
 const startFarmDogiators = async () => {
-	logger.info('запускаем фарм');
+	logger.info('запускаем фарм бустов');
 
 	const option = { headless: false };
 
@@ -27,7 +27,7 @@ const startFarmDogiators = async () => {
 
 	await page.emulate(Pixel).catch(() => logger.fatal('ошибка эмуляции'));
 	await page
-		.goto(URL, { waitUntil: 'load' })
+		.goto(URL, { waitUntil: ['load'] })
 		.catch(() => logger.fatal('ошибка перехода на страницу'));
 
 	await page.waitForSelector('.css-1t9owpd', { visible: true });
@@ -53,14 +53,8 @@ const startFarmDogiators = async () => {
 			coordinatesY: coordinatesForClickY,
 		};
 	};
-	const startFarm = async () => {
-		const existRateLimit = await page.locator('.css-1sta78r').wait();
-		logger.info(existRateLimit);
-		if (existRateLimit) throw new Error();
+	const startFarm = async (figure, figureData) => {
 		let launchedClick = true;
-		await page.waitForSelector('[role="figure"]');
-		const figure = await page.$('[role="figure"]');
-		const figureData = await figure.boundingBox();
 
 		const click = async () => {
 			const existImgTurbo = await page.$('[alt="turbo"]');
@@ -89,26 +83,46 @@ const startFarmDogiators = async () => {
 	};
 
 	const launchTurbo = async () => {
-		await page.waitForSelector('.css-1vfl7gr', {
-			visible: true,
-		});
-		const boosts = await page.$$('.css-1vfl7gr', { visible: true });
-		await page.waitForFunction(() => new Promise((res, _rej) => setTimeout(() => res('ok'), 5000)));
-		await boosts[0].click();
-		await page.waitForSelector('.MuiBox-root.css-108biwi', { visible: true });
-		const turbo = await page.$$('.MuiBox-root.css-108biwi button');
-		await page.waitForFunction(() => new Promise((res, _rej) => setTimeout(() => res('ok'), 3000)));
-		await turbo[0].click();
-		const btn = await page.$('.MuiBox-root.css-4q3rnc button');
-		await page.waitForFunction(() => new Promise((res, _rej) => setTimeout(() => res('ok'), 3000)));
-		await btn.click();
-		await page.waitForSelector('[alt="turbo"]', { visible: true });
-		const imgTurbo = await page.$('[alt="turbo"]');
-		await page.waitForFunction(() => new Promise((res, _rej) => setTimeout(() => res('ok'), 3000)));
-		await imgTurbo.click();
+		try {
+			await page.waitForSelector('.css-1vfl7gr', {
+				visible: true,
+			});
+			const boosts = await page.$$('.css-1vfl7gr', { visible: true });
+			await page.waitForFunction(
+				() => new Promise((res, _rej) => setTimeout(() => res('ok'), 5000))
+			);
+			await boosts[0].click();
+			await page.waitForSelector('.MuiBox-root.css-108biwi', { visible: true });
+			const turbo = await page.$$('.MuiBox-root.css-108biwi button');
+			await page.waitForFunction(
+				() => new Promise((res, _rej) => setTimeout(() => res('ok'), 3000))
+			);
+			await turbo[0].click();
+			const btn = await page.$('.MuiBox-root.css-4q3rnc button');
+			await page.waitForFunction(
+				() => new Promise((res, _rej) => setTimeout(() => res('ok'), 3000))
+			);
+			await btn.click();
+			await page.waitForSelector('[alt="turbo"]', { visible: true });
+			const imgTurbo = await page.$('[alt="turbo"]');
+			await page.waitForFunction(
+				() => new Promise((res, _rej) => setTimeout(() => res('ok'), 3000))
+			);
 
-		await page.waitForFunction(() => new Promise((res, _rej) => setTimeout(() => res('ok'), 2000)));
-		startFarm();
+			await page.waitForSelector('[role="figure"]');
+			const figure = await page.$('[role="figure"]');
+			const figureData = await figure.boundingBox();
+
+			await imgTurbo.click();
+
+			// const existRateLimit = page.locator('.css-1sta78r');
+			// logger.info(existRateLimit);
+			// if (existRateLimit) throw new Error('Rate limit');
+
+			startFarm(figure, figureData);
+		} catch (error) {
+			logger.error(error);
+		}
 	};
 	launchTurbo();
 };
